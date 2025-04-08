@@ -1,0 +1,471 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --foreground-rgb: 0, 0, 0;
+  --background-start-rgb: 255, 255, 255;
+  --background-end-rgb: 255, 255, 255;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --foreground-rgb: 255, 255, 255;
+    --background-start-rgb: 0, 0, 0;
+    --background-end-rgb: 0, 0, 0;
+  }
+}
+
+body {
+  color: rgb(var(--foreground-rgb));
+  background: linear-gradient(
+      to bottom,
+      transparent,
+      rgb(var(--background-end-rgb))
+    )
+    rgb(var(--background-start-rgb));
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
+    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+/* Smooth Scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Enhanced Typography */
+h1, h2, h3, h4, h5, h6 {
+  @apply font-bold tracking-tight;
+}
+
+.font-serif {
+  font-family: 'Playfair Display', Georgia, Cambria, "Times New Roman", Times, serif;
+}
+
+/* Custom Animations */
+@keyframes float {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.6s ease-out forwards;
+}
+
+/* Glass Effect */
+.glass {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Custom Button Styles */
+.btn {
+  @apply inline-flex items-center justify-center px-6 py-3 rounded-full font-medium transition-all duration-300;
+}
+
+.btn-primary {
+  @apply inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-amber-600 hover:bg-amber-700 transition-colors;
+}
+
+.btn-secondary {
+  @apply inline-flex items-center px-6 py-3 border border-white text-base font-medium rounded-md text-white hover:bg-white/10 transition-colors;
+}
+
+/* Card Hover Effects */
+.card-hover {
+  @apply transition-all duration-300 hover:shadow-xl hover:-translate-y-1;
+}
+
+/* Section Numbering */
+.section-number {
+  @apply absolute -left-8 -top-4 text-6xl text-amber-200 font-bold;
+}
+
+/* Gradient Text */
+.gradient-text {
+  @apply bg-clip-text text-transparent bg-gradient-to-r from-amber-400 to-amber-600;
+}
+
+/* Custom Container */
+.container {
+  @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+}
+
+/* Enhanced Link Styles */
+.link-hover {
+  @apply inline-flex items-center hover:text-amber-600 transition-colors;
+}
+
+.link-hover .icon {
+  @apply ml-2 transition-transform;
+}
+
+/* Image Hover Effects */
+.image-hover {
+  @apply transition-transform duration-500;
+}
+
+/* Custom Shadows */
+.shadow-custom {
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* Section Spacing */
+.section-spacing {
+  @apply py-24;
+}
+
+/* Background Patterns */
+.pattern-bg {
+  @apply relative overflow-hidden;
+}
+
+.pattern-bg::before {
+  content: '';
+  @apply absolute inset-0 bg-[url('/media/pattern.svg')] opacity-5;
+}
+
+/* Historic elements */
+.historic-border {
+  border-image: url('/media/pattern.svg') 30 round;
+}
+
+/* Elegant dividers */
+.elegant-divider {
+  @apply relative inline-block;
+}
+
+.elegant-divider::before,
+.elegant-divider::after {
+  content: '';
+  @apply absolute top-1/2 w-8 h-0.5 bg-amber-300/30;
+}
+
+.elegant-divider::before {
+  @apply -left-12;
+}
+
+.elegant-divider::after {
+  @apply -right-12;
+}
+
+/* Fox mark - subtle fox paw elements */
+.fox-mark {
+  @apply relative;
+}
+
+.fox-mark::after {
+  content: '';
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23d97706' opacity='0.1'%3E%3Cpath d='M12,3c-4.97,0-9,4.03-9,9c0,1.83,0.55,3.51,1.47,4.93c0.36,0.16,1.28-0.34,1.28-0.34s0.75,1.05,1.67,1.05c0.92,0,1.67-1.05,1.67-1.05s0.92,0.5,1.28,0.34C11.45,15.54,12,13.83,12,12c0-1.83-0.55-3.54-1.47-4.93c-0.36-0.16-1.28,0.34-1.28,0.34S8.5,6.36,7.58,6.36C6.67,6.36,5.92,7.41,5.92,7.41S5,6.91,4.63,7.07C3.72,8.46,3.17,10.17,3.17,12c0,3.31,2.69,6,6,6c3.31,0,6-2.69,6-6C15.17,7.03,12.48,4.34,9.17,4.34z'/%3E%3C/svg%3E");
+  @apply absolute w-24 h-24 opacity-5;
+}
+
+/* Classic button */
+.classic-button {
+  @apply relative inline-flex items-center justify-center px-6 py-3 overflow-hidden font-medium transition-all bg-white rounded-md hover:bg-white;
+}
+
+.classic-button span {
+  @apply relative z-10 text-amber-600;
+}
+
+.classic-button::before {
+  content: '';
+  @apply absolute top-0 left-0 w-0 h-full bg-amber-600 transition-all duration-500 ease-out;
+}
+
+.classic-button:hover::before {
+  @apply w-full;
+}
+
+.classic-button:hover span {
+  @apply text-white transition-colors;
+}
+
+/* Custom Utilities */
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+/* Custom Components */
+@layer components {
+  .card {
+    @apply bg-white rounded-lg shadow-lg overflow-hidden transform hover:scale-105 transition-transform duration-300;
+  }
+  
+  .section-title {
+    @apply text-3xl font-bold text-gray-900 mb-12 text-center;
+  }
+}
+
+/* Animation classes */
+.animate-on-scroll {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+.animate-fade-in {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Custom styles for the hero section */
+.hero-overlay {
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.3));
+}
+
+/* Custom styles for the navigation */
+.nav-link {
+  position: relative;
+  transition: color 0.3s ease;
+}
+
+.nav-link::after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 2px;
+  bottom: 0;
+  left: 0;
+  background-color: #d97706; /* amber-600 */
+  transition: width 0.3s ease;
+}
+
+.nav-link:hover::after {
+  width: 100%;
+}
+
+/* Custom styles for the footer */
+.footer-link {
+  @apply text-gray-300 hover:text-white transition-colors;
+}
+
+/* Custom styles for the video carousel */
+.video-carousel {
+  position: relative;
+  overflow: hidden;
+}
+
+.video-carousel video {
+  transition: opacity 0.5s ease-in-out;
+}
+
+/* Custom styles for the latest results section */
+.result-card {
+  @apply bg-gray-50 rounded-lg p-6 text-center;
+}
+
+/* Custom styles for the CTA section */
+.cta-section {
+  @apply py-16 bg-amber-600;
+}
+
+/* Custom styles for the about section */
+.about-section {
+  @apply py-16 bg-gray-50;
+}
+
+/* Custom styles for the latest updates section */
+.updates-section {
+  @apply py-16 bg-white;
+}
+
+/* Custom styles for the hero section */
+.hero-section {
+  @apply relative h-screen;
+}
+
+.hero-content {
+  @apply relative h-full flex items-center justify-center text-center;
+}
+
+.hero-title {
+  @apply text-4xl sm:text-5xl md:text-6xl font-bold text-white mb-6;
+}
+
+.hero-subtitle {
+  @apply text-xl sm:text-2xl text-white/90 mb-8;
+}
+
+/* Custom styles for the navigation */
+.navbar {
+  @apply fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-sm shadow-sm;
+}
+
+.navbar-container {
+  @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+}
+
+.navbar-content {
+  @apply flex justify-between items-center py-4;
+}
+
+.navbar-logo {
+  @apply flex items-center;
+}
+
+.navbar-links {
+  @apply hidden md:flex space-x-8;
+}
+
+.navbar-mobile-menu {
+  @apply md:hidden;
+}
+
+/* Custom styles for the footer */
+.footer {
+  @apply bg-gray-900 text-white py-12;
+}
+
+.footer-container {
+  @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+}
+
+.footer-content {
+  @apply grid grid-cols-1 md:grid-cols-4 gap-8;
+}
+
+.footer-column {
+  @apply space-y-4;
+}
+
+.footer-title {
+  @apply text-lg font-semibold text-white mb-4;
+}
+
+.footer-links {
+  @apply space-y-2;
+}
+
+.footer-social {
+  @apply flex space-x-4;
+}
+
+.footer-bottom {
+  @apply mt-8 pt-8 border-t border-gray-800 text-center text-gray-400;
+}
+
+/* Custom styles for the latest results section */
+.results-section {
+  @apply py-16 bg-white;
+}
+
+.results-grid {
+  @apply grid grid-cols-1 md:grid-cols-3 gap-8;
+}
+
+.result-date {
+  @apply text-2xl font-bold text-gray-900 mb-2;
+}
+
+.result-team {
+  @apply text-lg font-semibold text-gray-900;
+}
+
+.result-score {
+  @apply text-3xl font-bold text-amber-600 my-2;
+}
+
+/* Custom styles for the CTA section */
+.cta-title {
+  @apply text-3xl font-bold text-white mb-6;
+}
+
+.cta-subtitle {
+  @apply text-xl text-white/90 mb-8 max-w-2xl mx-auto;
+}
+
+.cta-buttons {
+  @apply flex flex-col sm:flex-row gap-4 justify-center;
+}
+
+/* Custom styles for the about section */
+.about-title {
+  @apply text-3xl font-bold text-gray-900 mb-6;
+}
+
+.about-text {
+  @apply text-gray-600 mb-6;
+}
+
+.about-image {
+  @apply relative h-96 rounded-lg overflow-hidden shadow-xl;
+}
+
+/* Custom styles for the latest updates section */
+.updates-title {
+  @apply text-3xl font-bold text-gray-900 mb-12 text-center;
+}
+
+.updates-grid {
+  @apply grid grid-cols-1 md:grid-cols-3 gap-8;
+}
+
+.update-card {
+  @apply bg-white rounded-lg shadow-lg overflow-hidden transform hover:scale-105 transition-transform duration-300;
+}
+
+.update-image {
+  @apply relative h-48;
+}
+
+.update-content {
+  @apply p-6;
+}
+
+.update-title {
+  @apply text-xl font-semibold text-gray-900 mb-2;
+}
+
+.update-text {
+  @apply text-gray-600 mb-4;
+}
+
+.update-link {
+  @apply text-amber-600 hover:text-amber-700 font-medium;
+} 
