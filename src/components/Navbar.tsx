@@ -1,9 +1,104 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
+import { motion, AnimatePresence } from 'framer-motion';
+import { FaChevronDown, FaPhoneAlt, FaQuoteRight } from 'react-icons/fa';
+
+interface NavLinkProps {
+  href: string;
+  label: string;
+  children?: { href: string; label: string }[];
+  isScrolled: boolean;
+  pathname: string;
+}
+
+const NavLink = ({ href, label, children, isScrolled, pathname }: NavLinkProps) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (ref.current && !ref.current.contains(event.target as Node)) {
+        setIsOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
+  const isActive = pathname === href || (pathname?.startsWith(href) && href !== '/');
+
+  if (children) {
+    return (
+      <div ref={ref} className="relative">
+        <button
+          onClick={() => setIsOpen(!isOpen)}
+          className={`flex items-center text-sm font-medium py-2 transition-colors duration-300 ${
+            isActive 
+              ? isScrolled 
+                ? 'text-blue-600' 
+                : 'text-blue-300'
+              : isScrolled 
+                ? 'text-gray-900 hover:text-blue-600' 
+                : 'text-white hover:text-blue-300'
+          }`}
+        >
+          {label}
+          <FaChevronDown className={`ml-1 h-3 w-3 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`} />
+        </button>
+        <AnimatePresence>
+          {isOpen && (
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 10 }}
+              transition={{ duration: 0.2 }}
+              className="absolute left-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-50"
+            >
+              <div className="py-1">
+                {children.map((item) => (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    className={`block px-4 py-2 text-sm hover:bg-blue-50 ${
+                      pathname === item.href ? 'text-blue-600 bg-blue-50' : 'text-gray-700'
+                    }`}
+                    onClick={() => setIsOpen(false)}
+                  >
+                    {item.label}
+                  </Link>
+                ))}
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+    );
+  }
+
+  return (
+    <Link
+      href={href}
+      className={`text-sm font-medium py-2 transition-colors duration-300 ${
+        isActive 
+          ? isScrolled 
+            ? 'text-blue-600' 
+            : 'text-blue-300'
+          : isScrolled 
+            ? 'text-gray-900 hover:text-blue-600' 
+            : 'text-white hover:text-blue-300'
+      }`}
+    >
+      {label}
+    </Link>
+  );
+};
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -34,12 +129,23 @@ const Navbar = () => {
   }, [isMobileMenuOpen]);
 
   const navLinks = [
-    { href: '/fixtures', label: 'Fixtures & Results' },
-    { href: '/squad', label: 'Squad' },
-    { href: '/news', label: 'News' },
+    { href: '/', label: 'Home' },
+    { 
+      href: '/services', 
+      label: 'Services',
+      children: [
+        { href: '/services/gutter-cleaning', label: 'Gutter Cleaning' },
+        { href: '/services/gutter-repairs', label: 'Gutter Repairs' },
+        { href: '/services/roof-cleaning', label: 'Roof Cleaning' },
+        { href: '/services/fascia-soffit-cleaning', label: 'Fascia & Soffit Cleaning' },
+        { href: '/services/pressure-washing', label: 'Pressure Washing' }
+      ]
+    },
     { href: '/about', label: 'About Us' },
-    { href: '/community', label: 'Community' },
-    { href: '/sponsors', label: 'Sponsors' },
+    { href: '/coverage', label: 'Areas Covered' },
+    { href: '/reviews', label: 'Reviews' },
+    { href: '/faq', label: 'FAQ' },
+    { href: '/blog', label: 'Blog' },
     { href: '/contact', label: 'Contact' },
   ];
 
@@ -47,67 +153,79 @@ const Navbar = () => {
     <nav
       className={`fixed w-full z-50 transition-all duration-300 ${
         isScrolled
-          ? 'bg-white/90 backdrop-blur-md shadow-md'
-          : 'bg-transparent'
+          ? 'bg-white shadow-md py-3'
+          : 'bg-blue-900 py-4'
       }`}
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
-        <div className="flex justify-between items-center h-20">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-between items-center">
           {/* Logo */}
           <div className="flex-shrink-0 flex items-center">
-            <Link href="/" className="flex items-center space-x-3 py-4">
-              <Image
-                src="/media/logo.png"
-                alt="Banstead Athletic FC Logo"
-                width={48}
-                height={48}
-                className="w-12 h-12"
-              />
-              <span className={`text-xl font-bold transition-colors duration-300 ${
-                isScrolled ? 'text-amber-600' : 'text-white'
-              }`}>
-                Banstead Athletic FC
-              </span>
+            <Link href="/" className="flex items-center space-x-2">
+              <div className={`relative overflow-hidden rounded ${isScrolled ? 'bg-white' : 'bg-white'} p-1`}>
+                <Image
+                  src="/media/logo.png"
+                  alt="We Clean Any Gutter Logo"
+                  width={48}
+                  height={40}
+                  className="w-12 h-10 object-contain"
+                />
+              </div>
+              <div className="hidden sm:block">
+                <span className={`font-bold text-xl transition-colors duration-300 ${
+                  isScrolled ? 'text-blue-900' : 'text-white'
+                }`}>
+                  We Clean Any Gutter
+                </span>
+                <p className={`text-xs transition-colors duration-300 ${
+                  isScrolled ? 'text-gray-600' : 'text-blue-200'
+                }`}>Professional Gutter Services</p>
+              </div>
             </Link>
           </div>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex md:items-center md:space-x-6">
+          <div className="hidden lg:flex lg:items-center lg:space-x-6">
             {navLinks.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                className={`text-sm font-medium transition-colors duration-300 ${
-                  isScrolled
-                    ? 'text-gray-900 hover:text-amber-600'
-                    : 'text-white hover:text-amber-200'
-                } ${
-                  pathname === link.href
-                    ? isScrolled
-                      ? 'text-amber-600'
-                      : 'text-amber-200'
-                    : ''
-                }`}
-              >
-                {link.label}
-              </Link>
+              <NavLink 
+                key={link.href} 
+                href={link.href} 
+                label={link.label} 
+                children={link.children} 
+                isScrolled={isScrolled} 
+                pathname={pathname || ''}
+              />
             ))}
             <Link
-              href="/fixtures"
-              className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-amber-600 hover:bg-amber-700 transition-colors duration-300"
+              href="/quote"
+              className={`ml-6 inline-flex items-center px-4 py-2 rounded-md text-sm font-medium transition-colors duration-300 ${
+                isScrolled
+                  ? 'bg-green-600 text-white hover:bg-green-700'
+                  : 'bg-green-500 text-white hover:bg-green-600'
+              }`}
             >
-              Next Match
+              <FaQuoteRight className="mr-2" /> Get a Quote
             </Link>
           </div>
 
-          {/* Mobile menu button */}
-          <div className="flex items-center md:hidden">
+          {/* Mobile Call Button */}
+          <div className="lg:hidden flex items-center space-x-3">
+            <a 
+              href="tel:01372703033" 
+              className={`inline-flex items-center px-3 py-1.5 rounded-md text-sm font-medium ${
+                isScrolled ? 'bg-blue-600 text-white' : 'bg-white text-blue-900'
+              }`}
+            >
+              <FaPhoneAlt className="mr-1.5" /> Call Us
+            </a>
+            
+            {/* Mobile menu button */}
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               className={`inline-flex items-center justify-center p-2 rounded-md transition-colors duration-300 ${
                 isScrolled
-                  ? 'text-gray-900 hover:text-amber-600'
-                  : 'text-white hover:text-amber-200'
+                  ? 'text-gray-700 hover:text-blue-600 hover:bg-gray-100'
+                  : 'text-white hover:text-blue-300 hover:bg-blue-800'
               }`}
             >
               <span className="sr-only">Open main menu</span>
@@ -148,35 +266,66 @@ const Navbar = () => {
       </div>
 
       {/* Mobile menu */}
-      <div
-        className={`md:hidden transition-all duration-300 ease-in-out ${
-          isMobileMenuOpen ? 'max-h-screen opacity-100' : 'max-h-0 opacity-0'
-        } overflow-hidden`}
-      >
-        <div className="px-2 pt-2 pb-3 space-y-1 bg-white shadow-lg">
-          {navLinks.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className={`block px-3 py-2 rounded-md text-sm font-medium ${
-                pathname === link.href
-                  ? 'text-amber-600 bg-amber-50'
-                  : 'text-gray-900 hover:text-amber-600 hover:bg-gray-50'
-              }`}
-              onClick={() => setIsMobileMenuOpen(false)}
-            >
-              {link.label}
-            </Link>
-          ))}
-          <Link
-            href="/fixtures"
-            className="block w-full text-center px-3 py-2 rounded-md text-sm font-medium text-white bg-amber-600 hover:bg-amber-700"
-            onClick={() => setIsMobileMenuOpen(false)}
+      <AnimatePresence>
+        {isMobileMenuOpen && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.3 }}
+            className="lg:hidden bg-white shadow-xl overflow-hidden mobile-menu-container"
           >
-            Next Match
-          </Link>
-        </div>
-      </div>
+            <div className="px-2 pt-2 pb-3 space-y-1 divide-y divide-gray-100">
+              {navLinks.map((link) => (
+                <div key={link.href} className="py-2">
+                  {link.children ? (
+                    <>
+                      <div className="px-3 py-2 font-medium text-blue-900">{link.label}</div>
+                      <div className="ml-4 space-y-1">
+                        {link.children.map((child) => (
+                          <Link
+                            key={child.href}
+                            href={child.href}
+                            className={`block px-3 py-2 rounded-md text-sm ${
+                              pathname === child.href
+                                ? 'text-blue-600 bg-blue-50'
+                                : 'text-gray-700 hover:text-blue-600 hover:bg-gray-50'
+                            }`}
+                            onClick={() => setIsMobileMenuOpen(false)}
+                          >
+                            {child.label}
+                          </Link>
+                        ))}
+                      </div>
+                    </>
+                  ) : (
+                    <Link
+                      href={link.href}
+                      className={`block px-3 py-2 rounded-md text-sm font-medium ${
+                        pathname === link.href
+                          ? 'text-blue-600 bg-blue-50'
+                          : 'text-gray-700 hover:text-blue-600 hover:bg-gray-50'
+                      }`}
+                      onClick={() => setIsMobileMenuOpen(false)}
+                    >
+                      {link.label}
+                    </Link>
+                  )}
+                </div>
+              ))}
+              <div className="pt-2">
+                <Link
+                  href="/quote"
+                  className="block w-full text-center px-3 py-2 rounded-md text-sm font-medium text-white bg-green-600 hover:bg-green-700"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  Get a Free Quote
+                </Link>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </nav>
   );
 };

@@ -1,22 +1,30 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
+import { motion, AnimatePresence } from 'framer-motion';
+import { FaLongArrowAltRight } from 'react-icons/fa';
+
+interface Media {
+  type: 'image' | 'video';
+  src: string;
+  alt?: string;
+}
 
 const Hero = () => {
-  const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
+  const [currentMediaIndex, setCurrentMediaIndex] = useState(0);
   const [isClient, setIsClient] = useState(false);
+  const videoRef = useRef<HTMLVideoElement>(null);
 
-  // List of videos for the hero carousel
-  const heroVideos = [
-    '/media/home_hero_slider/2025-03-29_20-56-31_UTC_1.mp4',
-    '/media/home_hero_slider/2025-03-08_21-25-43_UTC_2.mp4',
-    '/media/home_hero_slider/2023-10-06_22-38-48_UTC.mp4',
-    '/media/home_hero_slider/2023-07-12_22-46-41_UTC_1.mp4',
-    '/media/home_hero_slider/2023-07-12_22-46-41_UTC_7.mp4',
-    '/media/home_hero_slider/2023-07-12_22-46-41_UTC_8.mp4',
-    '/media/home_hero_slider/2023-06-29_13-04-16_UTC_6.mp4',
-    '/media/home_hero_slider/2023-06-29_13-04-16_UTC_7.mp4',
+  // List of media for the hero carousel
+  const heroMedia: Media[] = [
+    { type: 'video', src: '/media/home_hero_slider/Gutter-Vacuum-Cleaning.mp4' },
+    { type: 'video', src: '/media/home_hero_slider/2333-157269889_medium.mp4' },
+    { type: 'image', src: '/media/We-Clean-Any-Gutter-1.webp', alt: 'Gutter cleaning in progress' },
+    { type: 'image', src: '/media/We-Clean-Any-Gutter-2.webp', alt: 'Clean gutters after service' },
+    { type: 'image', src: '/media/We-Clean-Any-Gutter-3.webp', alt: 'Gutter vacuum cleaning system' },
+    { type: 'image', src: '/media/We-Clean-Any-Gutter-4.webp', alt: 'Professional gutter cleaning' },
   ];
 
   // Set isClient to true when component mounts (client-side only)
@@ -24,57 +32,142 @@ const Hero = () => {
     setIsClient(true);
   }, []);
 
-  // Auto-advance the video carousel
+  // Auto-advance the media carousel
   useEffect(() => {
     if (!isClient) return;
     
     const interval = setInterval(() => {
-      setCurrentVideoIndex((prevIndex) => (prevIndex + 1) % heroVideos.length);
-    }, 8000); // Change video every 8 seconds
+      setCurrentMediaIndex((prevIndex) => (prevIndex + 1) % heroMedia.length);
+    }, 7000); // Change media every 7 seconds
 
     return () => clearInterval(interval);
-  }, [isClient]);
+  }, [isClient, heroMedia.length]);
+
+  // Play video when it becomes active
+  useEffect(() => {
+    if (isClient && heroMedia[currentMediaIndex].type === 'video' && videoRef.current) {
+      videoRef.current.play().catch(err => console.log('Video play error:', err));
+    }
+  }, [currentMediaIndex, isClient, heroMedia]);
 
   return (
     <section className="relative h-screen overflow-hidden">
+      {/* Pattern overlay */}
+      <div 
+        className="absolute inset-0 bg-blue-900/30 z-10"
+        style={{
+          backgroundImage: 'url(/media/pattern.svg)',
+          backgroundSize: '100px',
+          backgroundRepeat: 'repeat',
+          mixBlendMode: 'multiply',
+          opacity: 0.2
+        }}
+      />
+      
+      {/* Dark overlay */}
+      <div className="absolute inset-0 bg-gradient-to-r from-black/70 to-blue-900/60 z-10" />
+      
+      {/* Media slides */}
       <div className="absolute inset-0">
-        {isClient && (
-          <video
-            key={heroVideos[currentVideoIndex]}
-            autoPlay
-            muted
-            loop
-            playsInline
-            className="object-cover w-full h-full"
-            style={{ objectFit: 'cover', width: '100%', height: '100%' }}
-          >
-            <source src={heroVideos[currentVideoIndex]} type="video/mp4" />
-            Your browser does not support the video tag.
-          </video>
-        )}
-        <div className="absolute inset-0 bg-black/50" />
+        <AnimatePresence>
+          {isClient && (
+            <motion.div
+              key={currentMediaIndex}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 1.5 }}
+              className="absolute inset-0"
+            >
+              {heroMedia[currentMediaIndex].type === 'video' ? (
+                <video
+                  ref={videoRef}
+                  autoPlay
+                  muted
+                  loop
+                  playsInline
+                  className="object-cover w-full h-full"
+                >
+                  <source src={heroMedia[currentMediaIndex].src} type="video/mp4" />
+                  Your browser does not support the video tag.
+                </video>
+              ) : (
+                <Image
+                  src={heroMedia[currentMediaIndex].src}
+                  alt={heroMedia[currentMediaIndex].alt || "Gutter cleaning services"}
+                  fill
+                  className="object-cover"
+                  priority
+                />
+              )}
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
-      <div className="relative h-full flex items-center justify-center text-center">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-white mb-6 animate-fade-in">
-            Welcome to Banstead Athletic FC
-          </h1>
-          <p className="text-xl sm:text-2xl text-white/90 mb-8 animate-fade-in">
-            A proud community-focused club based in Chessington, Surrey
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in">
-            <Link
-              href="/fixtures"
-              className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-amber-600 hover:bg-amber-700 transition-colors"
+      
+      {/* Content */}
+      <div className="relative h-full flex items-center z-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="max-w-3xl">
+            <motion.h1 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, delay: 0.2 }}
+              className="text-4xl sm:text-5xl md:text-6xl font-bold text-white mb-6"
             >
-              View Fixtures
-            </Link>
-            <Link
-              href="/about"
-              className="inline-flex items-center px-6 py-3 border border-white text-base font-medium rounded-md text-white hover:bg-white/10 transition-colors"
+              Professional <span className="text-blue-300">Gutter Cleaning</span> Services
+            </motion.h1>
+            
+            <motion.p 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, delay: 0.4 }}
+              className="text-xl sm:text-2xl text-white/90 mb-8"
             >
-              Learn More
-            </Link>
+              We clean any gutter, any height, any property. Serving Surrey, Sussex, Kent, and London.
+            </motion.p>
+            
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, delay: 0.6 }}
+              className="flex flex-col sm:flex-row gap-4"
+            >
+              <Link
+                href="/quote"
+                className="inline-flex items-center justify-center px-6 py-3 bg-green-600 text-white text-lg font-medium rounded-md hover:bg-green-700 transition-colors group"
+              >
+                Get a Free Quote
+                <FaLongArrowAltRight className="ml-2 transform transition-transform group-hover:translate-x-1" />
+              </Link>
+              <Link
+                href="/services/gutter-cleaning"
+                className="inline-flex items-center justify-center px-6 py-3 border-2 border-white text-white text-lg font-medium rounded-md hover:bg-white/10 transition-colors"
+              >
+                Our Services
+              </Link>
+            </motion.div>
+            
+            {/* Trust badges */}
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.7, delay: 0.8 }}
+              className="mt-12 flex flex-wrap gap-4 items-center"
+            >
+              <div className="bg-white/10 backdrop-blur-md px-4 py-2 rounded-md text-white">
+                <span className="text-blue-300 font-bold">15+ Years</span> Experience
+              </div>
+              <div className="bg-white/10 backdrop-blur-md px-4 py-2 rounded-md text-white">
+                <span className="text-blue-300 font-bold">Fully</span> Insured
+              </div>
+              <div className="bg-white/10 backdrop-blur-md px-4 py-2 rounded-md text-white">
+                <span className="text-blue-300 font-bold">5-Star</span> Rated
+              </div>
+              <div className="bg-white/10 backdrop-blur-md px-4 py-2 rounded-md text-white">
+                <span className="text-blue-300 font-bold">No</span> Ladders
+              </div>
+            </motion.div>
           </div>
         </div>
       </div>

@@ -1,215 +1,169 @@
 'use client';
-import React from 'react';
+
 import Link from 'next/link';
-import { motion } from 'framer-motion';
-import { FaFacebookF, FaInstagram, FaPinterestP, FaPhoneAlt, FaEnvelope, FaMapMarkerAlt } from 'react-icons/fa';
+import Image from 'next/image';
+import { FaFacebook, FaTwitter, FaInstagram, FaYoutube, FaTiktok, FaMapMarkerAlt, FaPhone, FaEnvelope, FaClock } from 'react-icons/fa';
 
-export default function Footer() {
-  const currentYear = new Date().getFullYear();
-  
-  const footerAnimation = {
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        delay: 0.1,
-        duration: 0.5,
-      },
-    },
-  };
-
-  const footerAnimationDelayed = (delay: number) => ({
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        delay,
-        duration: 0.5,
-      },
-    },
-  });
-
+const Footer = () => {
   return (
-    <footer className="bg-primary text-white">
-      <div className="container mx-auto px-4">
-        {/* Main footer content */}
-        <div className="py-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-          {/* Column 1: About */}
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            variants={footerAnimation}
-          >
-            <h3 className="text-xl font-serif font-medium mb-6">Bookham Kitchens</h3>
-            <p className="text-gray-300 mb-4">
-              Family-run kitchen design and installation specialists in Surrey, providing bespoke solutions tailored to your needs.
-            </p>
-            <div className="flex space-x-4 mt-6">
-              <a 
-                href="https://facebook.com" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="bg-white/10 hover:bg-white/20 transition-colors p-2 rounded-full"
-              >
-                <FaFacebookF className="h-4 w-4" />
-              </a>
-              <a 
-                href="https://instagram.com" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="bg-white/10 hover:bg-white/20 transition-colors p-2 rounded-full"
-              >
-                <FaInstagram className="h-4 w-4" />
-              </a>
-              <a 
-                href="https://pinterest.com" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="bg-white/10 hover:bg-white/20 transition-colors p-2 rounded-full"
-              >
-                <FaPinterestP className="h-4 w-4" />
-              </a>
-            </div>
-          </motion.div>
-          
-          {/* Column 2: Services */}
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            variants={footerAnimationDelayed(0.2)}
-          >
-            <h3 className="text-xl font-serif font-medium mb-6">Services</h3>
+    <footer className="bg-blue-900 text-white">
+      <div className="max-w-7xl mx-auto py-16 px-4 sm:px-6 lg:px-8">
+        <div className="flex flex-col items-center mb-12">
+          <Image
+            src="/media/logo.png"
+            alt="We Clean Any Gutter Logo"
+            width={150}
+            height={100}
+            className="w-auto h-20 mb-6 bg-white p-2 rounded-md"
+          />
+          <h2 className="text-3xl font-bold text-blue-200 mb-4">We Clean Any Gutter</h2>
+          <p className="text-blue-200 text-center max-w-2xl">
+            Professional gutter cleaning services for residential and commercial properties. 
+            Serving Surrey, Sussex, Kent, and London with our no-ladder gutter vacuum system.
+          </p>
+        </div>
+        
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
+          <div>
+            <h3 className="text-lg font-semibold mb-4 text-blue-200">Contact Us</h3>
             <ul className="space-y-3">
+              <li className="flex items-start">
+                <FaMapMarkerAlt className="mt-1 mr-2 text-blue-200" />
+                <span className="text-gray-300">Leatherhead, Surrey KT22</span>
+              </li>
+              <li className="flex items-center">
+                <FaPhone className="mr-2 text-blue-200" />
+                <a href="tel:01372703033" className="text-gray-300 hover:text-white transition-colors">
+                  01372 703033
+                </a>
+              </li>
+              <li className="flex items-center">
+                <FaEnvelope className="mr-2 text-blue-200" />
+                <a href="mailto:info@wecleananygutter.co.uk" className="text-gray-300 hover:text-white transition-colors">
+                  info@wecleananygutter.co.uk
+                </a>
+              </li>
+              <li className="flex items-start">
+                <FaClock className="mt-1 mr-2 text-blue-200" />
+                <div className="text-gray-300">
+                  <p>Mon-Fri: 8am-7pm</p>
+                  <p>Saturday: 9am-5pm</p>
+                  <p>Sunday: 10am-4pm</p>
+                </div>
+              </li>
+            </ul>
+          </div>
+          
+          <div>
+            <h3 className="text-lg font-semibold mb-4 text-blue-200">Our Services</h3>
+            <ul className="space-y-2">
               <li>
-                <Link href="/kitchens/fitted" className="text-gray-300 hover:text-accent transition-colors">
-                  Fitted Kitchens
+                <Link href="/services/gutter-cleaning" className="text-gray-300 hover:text-white transition-colors">
+                  Gutter Cleaning
                 </Link>
               </li>
               <li>
-                <Link href="/kitchens/replacement-doors" className="text-gray-300 hover:text-accent transition-colors">
-                  Replacement Doors
+                <Link href="/services/gutter-repairs" className="text-gray-300 hover:text-white transition-colors">
+                  Gutter Repairs
                 </Link>
               </li>
               <li>
-                <Link href="/kitchens/cabinet-spray-painting" className="text-gray-300 hover:text-accent transition-colors">
-                  Cabinet Spray Painting
+                <Link href="/services/roof-cleaning" className="text-gray-300 hover:text-white transition-colors">
+                  Roof Cleaning
                 </Link>
               </li>
               <li>
-                <Link href="/home-living/bedroom-cabinets" className="text-gray-300 hover:text-accent transition-colors">
-                  Bedroom Cabinets
+                <Link href="/services/fascia-soffit-cleaning" className="text-gray-300 hover:text-white transition-colors">
+                  Fascia & Soffit Cleaning
                 </Link>
               </li>
               <li>
-                <Link href="/home-living/home-office" className="text-gray-300 hover:text-accent transition-colors">
-                  Home Office
-                </Link>
-              </li>
-              <li>
-                <Link href="/building-services/kitchen-installation" className="text-gray-300 hover:text-accent transition-colors">
-                  Kitchen Installation
+                <Link href="/services/pressure-washing" className="text-gray-300 hover:text-white transition-colors">
+                  Pressure Washing
                 </Link>
               </li>
             </ul>
-          </motion.div>
+          </div>
           
-          {/* Column 3: Quick Links */}
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            variants={footerAnimationDelayed(0.3)}
-          >
-            <h3 className="text-xl font-serif font-medium mb-6">Quick Links</h3>
-            <ul className="space-y-3">
+          <div>
+            <h3 className="text-lg font-semibold mb-4 text-blue-200">About Us</h3>
+            <ul className="space-y-2">
               <li>
-                <Link href="/portfolio" className="text-gray-300 hover:text-accent transition-colors">
-                  Portfolio
+                <Link href="/about" className="text-gray-300 hover:text-white transition-colors">
+                  Our Company
                 </Link>
               </li>
               <li>
-                <Link href="/about" className="text-gray-300 hover:text-accent transition-colors">
-                  About Us
+                <Link href="/coverage" className="text-gray-300 hover:text-white transition-colors">
+                  Areas We Cover
                 </Link>
               </li>
               <li>
-                <Link href="/blog" className="text-gray-300 hover:text-accent transition-colors">
+                <Link href="/reviews" className="text-gray-300 hover:text-white transition-colors">
+                  Customer Reviews
+                </Link>
+              </li>
+              <li>
+                <Link href="/faq" className="text-gray-300 hover:text-white transition-colors">
+                  FAQ
+                </Link>
+              </li>
+              <li>
+                <Link href="/blog" className="text-gray-300 hover:text-white transition-colors">
                   Blog
                 </Link>
               </li>
-              <li>
-                <Link href="/contact" className="text-gray-300 hover:text-accent transition-colors">
-                  Contact
-                </Link>
-              </li>
-              <li>
-                <Link href="/privacy-policy" className="text-gray-300 hover:text-accent transition-colors">
-                  Privacy Policy
-                </Link>
-              </li>
-              <li>
-                <Link href="/terms-of-service" className="text-gray-300 hover:text-accent transition-colors">
-                  Terms of Service
-                </Link>
-              </li>
             </ul>
-          </motion.div>
+          </div>
           
-          {/* Column 4: Contact */}
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            variants={footerAnimationDelayed(0.4)}
-          >
-            <h3 className="text-xl font-serif font-medium mb-6">Contact Us</h3>
-            <ul className="space-y-4">
-              <li className="flex items-start">
-                <FaMapMarkerAlt className="h-5 w-5 text-accent mr-3 mt-1" />
-                <span className="text-gray-300">
-                  25 Church Road, Great Bookham<br />
-                  Leatherhead, Surrey<br />
-                  KT23 3PG
-                </span>
-              </li>
-              <li className="flex items-center">
-                <FaPhoneAlt className="h-4 w-4 text-accent mr-3" />
-                <a href="tel:+441932391183" className="text-gray-300 hover:text-accent transition-colors">
-                  01932 391183
-                </a>
-              </li>
-              <li className="flex items-center">
-                <FaEnvelope className="h-4 w-4 text-accent mr-3" />
-                <a href="mailto:sales@bookhamkitchens.co.uk" className="text-gray-300 hover:text-accent transition-colors">
-                  sales@bookhamkitchens.co.uk
-                </a>
-              </li>
-            </ul>
-            <div className="mt-6">
-              <h4 className="text-sm font-medium mb-2">Opening Hours</h4>
-              <p className="text-gray-300 text-sm">
-                Monday - Friday: 9:00am - 5:30pm<br />
-                Saturday: 9:00am - 4:00pm<br />
-                Sunday: Closed
-              </p>
+          <div>
+            <h3 className="text-lg font-semibold mb-4 text-blue-200">Get In Touch</h3>
+            <p className="text-gray-300 mb-4">
+              Need a quick quote? Get in touch with us today for a free, no-obligation assessment.
+            </p>
+            <Link
+              href="/quote"
+              className="inline-block px-4 py-2 bg-green-600 rounded-md text-white font-medium hover:bg-green-700 transition-colors mb-6"
+            >
+              Request a Quote
+            </Link>
+            <div className="flex space-x-4">
+              <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="text-gray-300 hover:text-white transition-colors">
+                <FaFacebook className="h-6 w-6" />
+              </a>
+              <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="text-gray-300 hover:text-white transition-colors">
+                <FaTwitter className="h-6 w-6" />
+              </a>
+              <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="text-gray-300 hover:text-white transition-colors">
+                <FaInstagram className="h-6 w-6" />
+              </a>
+              <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" className="text-gray-300 hover:text-white transition-colors">
+                <FaYoutube className="h-6 w-6" />
+              </a>
+              <a href="https://tiktok.com" target="_blank" rel="noopener noreferrer" className="text-gray-300 hover:text-white transition-colors">
+                <FaTiktok className="h-6 w-6" />
+              </a>
             </div>
-          </motion.div>
+          </div>
         </div>
         
-        {/* Bottom bar */}
-        <div className="py-6 border-t border-white/10 text-sm text-gray-400">
-          <div className="flex flex-col md:flex-row justify-between items-center">
-            <p>© {currentYear} Bookham Kitchens. All rights reserved.</p>
-            <p className="mt-2 md:mt-0">
-              Designed with <span className="text-accent">♥</span> in Surrey
-            </p>
+        <div className="border-t border-blue-800 pt-8 text-center text-gray-300 text-sm">
+          <p>&copy; {new Date().getFullYear()} We Clean Any Gutter. All Rights Reserved.</p>
+          <div className="mt-2 flex justify-center space-x-4">
+            <Link href="/privacy-policy" className="hover:text-white transition-colors">
+              Privacy Policy
+            </Link>
+            <Link href="/terms" className="hover:text-white transition-colors">
+              Terms & Conditions
+            </Link>
+            <Link href="/sitemap" className="hover:text-white transition-colors">
+              Sitemap
+            </Link>
           </div>
         </div>
       </div>
     </footer>
   );
-} 
+};
+
+export default Footer; 
